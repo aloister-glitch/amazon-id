@@ -1,1 +1,58 @@
-
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Amazon ID Grabber</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { background: #0F1111; color: #fff; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; min-height: 100vh; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 32px 16px; }
+    .container { width: 100%; max-width: 480px; }
+    .header { display: flex; align-items: center; gap: 12px; margin-bottom: 32px; }
+    .icon { width: 44px; height: 44px; background: #FF9900; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 26px; font-weight: 900; color: #0F1111; font-family: Arial, sans-serif; flex-shrink: 0; }
+    h1 { font-size: 20px; font-weight: 700; color: #FF9900; }
+    h1 span { display: block; font-size: 12px; font-weight: 400; color: #666; margin-top: 2px; }
+    .drag-area { background: #1A1D1D; border: 1px solid #2e2e2e; border-radius: 12px; padding: 24px; margin-bottom: 24px; text-align: center; }
+    .drag-area p { font-size: 13px; color: #888; margin-bottom: 16px; }
+    .drag-area p strong { color: #ccc; }
+    #bookmarklet-btn { display: inline-block; background: #FF9900; color: #0F1111; font-size: 14px; font-weight: 700; padding: 12px 24px; border-radius: 8px; text-decoration: none; cursor: grab; user-select: none; border: 3px dashed transparent; transition: border-color 0.2s, background 0.2s; }
+    #bookmarklet-btn:hover { border-color: #fff4; background: #ffaa22; }
+    .drag-hint { margin-top: 14px; font-size: 11px; color: #555; display: flex; align-items: center; justify-content: center; gap: 6px; }
+    .arrow { font-size: 18px; animation: bounce 1.2s infinite; }
+    @keyframes bounce { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-5px); } }
+    .steps { background: #1A1D1D; border: 1px solid #2e2e2e; border-radius: 12px; padding: 20px 24px; margin-bottom: 24px; }
+    .steps h2 { font-size: 11px; text-transform: uppercase; letter-spacing: 0.1em; color: #666; margin-bottom: 16px; }
+    .step { display: flex; gap: 14px; align-items: flex-start; margin-bottom: 14px; }
+    .step:last-child { margin-bottom: 0; }
+    .step-num { width: 22px; height: 22px; background: #FF9900; color: #0F1111; border-radius: 50%; font-size: 11px; font-weight: 800; display: flex; align-items: center; justify-content: center; flex-shrink: 0; margin-top: 1px; }
+    .step-text { font-size: 13px; color: #ccc; line-height: 1.5; }
+    .step-text code { background: #0F1111; border: 1px solid #333; border-radius: 4px; padding: 1px 6px; font-size: 12px; color: #FF9900; font-family: "SF Mono", monospace; }
+    .footer { text-align: center; font-size: 11px; color: #444; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="header">
+      <div class="icon">a</div>
+      <h1>Amazon ID Grabber<span>Bookmarklet — sem instalação</span></h1>
+    </div>
+    <div class="drag-area">
+      <p><strong>Arraste o botão abaixo</strong> para a sua barra de favoritos:</p>
+      <a id="bookmarklet-btn" href="#">⚡ Pegar Amazon ID</a>
+      <div class="drag-hint"><span class="arrow">☝️</span><span>Arraste este botão para os favoritos do seu navegador</span></div>
+    </div>
+    <div class="steps">
+      <h2>Como usar</h2>
+      <div class="step"><div class="step-num">1</div><div class="step-text">Arraste o botão laranja acima para a <strong>barra de favoritos</strong> do seu navegador.</div></div>
+      <div class="step"><div class="step-num">2</div><div class="step-text">Acesse <code>amazon.com.br</code> e faça login na sua conta.</div></div>
+      <div class="step"><div class="step-num">3</div><div class="step-text">Clique no favorito <code>⚡ Pegar Amazon ID</code> em qualquer página da Amazon.</div></div>
+      <div class="step"><div class="step-num">4</div><div class="step-text">Seu <strong>Customer ID</strong> aparece numa janela — copiado automaticamente.</div></div>
+    </div>
+    <div class="footer">Funciona em Chrome, Firefox, Safari, Edge · amazon.com.br e amazon.com</div>
+  </div>
+  <script>
+    const bookmarkletCode = `(function(){var html=document.documentElement.innerHTML;var patterns=[/"customerID"\s*:\s*"([A-Z0-9]+)"/i,/customerId["']?\s*:\s*["']([A-Z0-9]+)["']/i,/ue_id\s*=\s*["']([A-Z0-9]+)["']/i,/customer-id['":\s]+([A-Z0-9]{10,})/i];var id=null;for(var i=0;i<patterns.length;i++){var m=html.match(patterns[i]);if(m&&m[1]){id=m[1];break;}}if(!id){var cookies=document.cookie.split(';');for(var j=0;j<cookies.length;j++){if(cookies[j].trim().indexOf('ubid-main')===0){id=cookies[j].split('=')[1]||null;break;}}}if(id){try{navigator.clipboard.writeText(id);}catch(e){}alert('Amazon Customer ID:\n\n'+id+'\n\n(copiado)');}else{alert('ID nao encontrado.\nAcesse a pagina inicial da Amazon logado e tente novamente.');}})();`;
+    document.getElementById('bookmarklet-btn').href = 'javascript:' + encodeURIComponent(bookmarkletCode);
+  </script>
+</body>
+</html>
